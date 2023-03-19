@@ -45,6 +45,9 @@ queue_t *queue_new(void) {
 void queue_free(queue_t *q) {
     /* How about freeing the list elements and the strings? */
     /* Free queue structure */
+    if (q == NULL) {
+        return;
+    }
     while (q->head != NULL) {
         char *buf = NULL;
         queue_remove_head(q, buf, 1);
