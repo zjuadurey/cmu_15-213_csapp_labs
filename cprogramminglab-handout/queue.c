@@ -46,6 +46,7 @@ void queue_free(queue_t *q) {
     /* How about freeing the list elements and the strings? */
     /* Free queue structure */
     if (q == NULL) {
+        printf("queue_free error: q is NULL\n");
         return;
     }
     while (q->head != NULL) {
