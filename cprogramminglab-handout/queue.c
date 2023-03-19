@@ -15,6 +15,7 @@
 
 #include "queue.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -23,9 +24,17 @@
  * @return The new queue, or NULL if memory allocation failed
  */
 queue_t *queue_new(void) {
-    queue_t *q = malloc(sizeof(queue_t));
+    queue_t *q = (queue_t *)malloc(sizeof(queue_t));
+
     /* What if malloc returned NULL? */
+    if (q == NULL) {
+        printf("queue_new error: malloc returned NULL\n");
+        return NULL;
+    }
+
     q->head = NULL;
+    q->q_size = 0;
+    q->tail = NULL;
     return q;
 }
 
@@ -52,13 +61,55 @@ void queue_free(queue_t *q) {
  * @return false if q is NULL, or memory allocation failed
  */
 bool queue_insert_head(queue_t *q, const char *s) {
+    if (q == NULL) {
+        printf("queue_insert_head error: q is NULL\n");
+        return false;
+    }
+
     list_ele_t *newh;
     /* What should you do if the q is NULL? */
-    newh = malloc(sizeof(list_ele_t));
-    /* Don't forget to allocate space for the string and copy it */
+    newh = (list_ele_t *)malloc(sizeof(list_ele_t));
     /* What if either call to malloc returns NULL? */
+    if (newh == NULL) {
+        printf("queue_insert_head error: malloc returned NULL\n");
+        return false;
+    }
+
+    size_t lengthS = strlen(s);
+
+    newh->value = (char *)malloc(sizeof(char) * (lengthS + (size_t)1));
+    /* Don't forget to allocate space for the string and copy it */
+    char *copy = (char *)malloc((lengthS) * sizeof(char));
+    strncpy(copy, s, lengthS);
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        printf("s[%d]: %c\n", i, s[i + 1]);
+    }
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        printf("copy[%d]: %c\n", i, copy[i]);
+    }
+
+    // newh->value = copy;
+
+    strncpy(newh->value, copy, lengthS);
+
+    newh->value[lengthS] = '\0';
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        printf("value[%d]: %c\n", i, newh->value[i + 1]);
+    }
+
+    /* Pointers processing */
+    if (q->head == NULL)
+        q->tail = newh;
     newh->next = q->head;
     q->head = newh;
+    q->q_size++;
+    printf("lengthS:%lu\n", lengthS);
+
+    printf("value:%s\n", newh->value);
+    printf("lengthS:%lu\n", lengthS);
     return true;
 }
 
@@ -77,6 +128,30 @@ bool queue_insert_head(queue_t *q, const char *s) {
 bool queue_insert_tail(queue_t *q, const char *s) {
     /* You need to write the complete code for this function */
     /* Remember: It should operate in O(1) time */
+    if (q == NULL) {
+        printf("queue_insert_tail error: q is NULL\n");
+        return false;
+    }
+
+    list_ele_t *newh;
+    /* What should you do if the q is NULL? */
+    newh = (list_ele_t *)malloc(sizeof(list_ele_t));
+
+    /* Don't forget to allocate space for the string and copy it */
+    size_t lengthS = strlen(s);
+    char *copy = (char *)malloc((lengthS) * sizeof(char));
+    strncpy(copy, s, lengthS);
+
+    newh->value = copy;
+
+    /*Tail processing*/
+    if (q->q_size == 0) {
+        q->head = newh;
+    } else {
+        q->tail->next = newh;
+    }
+    q->tail = newh;
+    q->q_size++;
     return false;
 }
 
@@ -99,6 +174,25 @@ bool queue_insert_tail(queue_t *q, const char *s) {
  */
 bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
     /* You need to fix up this code. */
+
+    if (q == NULL) {
+        printf("queue_remove_head error: q is NULL\n");
+        return false;
+    }
+
+    if (q->head == NULL) {
+        printf("queue_remove_head error: q has no elements attached\n");
+        return false;
+    }
+    list_ele_t *delElement = q->head;
+
+    if (buf != NULL) {
+        strncpy(buf, delElement->value, bufsize - (unsigned long)1);
+        strcpy(buf + strlen(buf), "\0");
+    }
+
+    free(delElement);
+
     q->head = q->head->next;
     return true;
 }
@@ -116,7 +210,7 @@ bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
 size_t queue_size(queue_t *q) {
     /* You need to write the code for this function */
     /* Remember: It should operate in O(1) time */
-    return 0;
+    return q->q_size;
 }
 
 /**
@@ -130,4 +224,5 @@ size_t queue_size(queue_t *q) {
  */
 void queue_reverse(queue_t *q) {
     /* You need to write the code for this function */
+    q = NULL;
 }
