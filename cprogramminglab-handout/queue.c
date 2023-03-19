@@ -184,7 +184,7 @@ bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
     free(delElement->value);
     q->head = q->head->next;
     free(delElement);
-
+    q->q_size--;
     return true;
 }
 
@@ -215,5 +215,27 @@ size_t queue_size(queue_t *q) {
  */
 void queue_reverse(queue_t *q) {
     /* You need to write the code for this function */
-    q = NULL;
+    if (q == NULL) {
+        printf("queue_reverse error: q is NULL\n");
+        return;
+    }
+
+    if (q->head == NULL) {
+        printf("queue_reverse error: q is empty\n");
+        return;
+    }
+
+    q->tail = q->head;
+
+    list_ele_t *pre = NULL;
+    list_ele_t *next = NULL;
+
+    while (q->head != NULL) {
+        next = q->head->next;
+        q->head->next = pre;
+        pre = q->head;
+        q->head = next;
+    }
+
+    q->head = pre;
 }
