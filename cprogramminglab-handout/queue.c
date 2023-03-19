@@ -79,26 +79,9 @@ bool queue_insert_head(queue_t *q, const char *s) {
 
     newh->value = (char *)malloc(sizeof(char) * (lengthS + (size_t)1));
     /* Don't forget to allocate space for the string and copy it */
-    char *copy = (char *)malloc((lengthS) * sizeof(char));
-    strncpy(copy, s, lengthS);
-
-    for (int i = 0; s[i] != '\0'; i++) {
-        printf("s[%d]: %c\n", i, s[i + 1]);
-    }
-
-    for (int i = 0; s[i] != '\0'; i++) {
-        printf("copy[%d]: %c\n", i, copy[i]);
-    }
-
-    // newh->value = copy;
-
-    strncpy(newh->value, copy, lengthS);
+    strncpy(newh->value, s, lengthS);
 
     newh->value[lengthS] = '\0';
-
-    for (int i = 0; s[i] != '\0'; i++) {
-        printf("value[%d]: %c\n", i, newh->value[i + 1]);
-    }
 
     /* Pointers processing */
     if (q->head == NULL)
@@ -106,10 +89,7 @@ bool queue_insert_head(queue_t *q, const char *s) {
     newh->next = q->head;
     q->head = newh;
     q->q_size++;
-    printf("lengthS:%lu\n", lengthS);
-
-    printf("value:%s\n", newh->value);
-    printf("lengthS:%lu\n", lengthS);
+    // printf("tail: %s\n", q->tail->value);
     return true;
 }
 
@@ -137,20 +117,31 @@ bool queue_insert_tail(queue_t *q, const char *s) {
     /* What should you do if the q is NULL? */
     newh = (list_ele_t *)malloc(sizeof(list_ele_t));
 
+    if (newh == NULL) {
+        printf("queue_insert_tail error: newh is NULL\n");
+        return false;
+    }
+
     /* Don't forget to allocate space for the string and copy it */
     size_t lengthS = strlen(s);
-    char *copy = (char *)malloc((lengthS) * sizeof(char));
-    strncpy(copy, s, lengthS);
+    newh->value = (char *)malloc(sizeof(char) * (lengthS + (size_t)1));
+    if (newh->value == NULL) {
+        printf("queue_insert_tail error: newh->value is NULL\n");
+        return false;
+    }
 
-    newh->value = copy;
+    strncpy(newh->value, s, lengthS);
+    newh->value[lengthS] = '\0';
+    newh->next = NULL;
 
     /*Tail processing*/
     if (q->q_size == 0) {
         q->head = newh;
+        q->tail = newh;
     } else {
         q->tail->next = newh;
+        q->tail = newh;
     }
-    q->tail = newh;
     q->q_size++;
     return false;
 }
@@ -188,12 +179,12 @@ bool queue_remove_head(queue_t *q, char *buf, size_t bufsize) {
 
     if (buf != NULL) {
         strncpy(buf, delElement->value, bufsize - (unsigned long)1);
-        strcpy(buf + strlen(buf), "\0");
+        buf[bufsize - 1] = '\0';
     }
-
+    free(delElement->value);
+    q->head = q->head->next;
     free(delElement);
 
-    q->head = q->head->next;
     return true;
 }
 
