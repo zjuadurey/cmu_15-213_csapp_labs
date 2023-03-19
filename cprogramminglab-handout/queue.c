@@ -143,7 +143,7 @@ bool queue_insert_tail(queue_t *q, const char *s) {
         q->tail = newh;
     }
     q->q_size++;
-    return false;
+    return true;
 }
 
 /**
