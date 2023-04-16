@@ -151,6 +151,7 @@ long dividePower2(long x, long n) {
  *   Rating: 2
  */
 long distinctNegation(long x) {
+    // x^(~x + 1) set to all 0s when x == -x (== (~x + 1))
     return !!(x ^ (~x + 1));
 }
 /*
