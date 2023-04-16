@@ -185,7 +185,12 @@ long isLessOrEqual(long x, long y) {
  *   Rating: 3
  */
 long replaceByte(long x, long n, long c) {
-    return 2;
+    long tmp = c << (n << 3);
+    // https://stackoverflow.com/questions/4201301/warning-left-shift-count-width-of-type
+    long mask = ~(0xffL << (n << 3));
+    // long mask = ~(0x1 << 63) + (0x1 << 63);
+    // printf("%lx\n", (unsigned long)mask);
+    return (x & mask) | tmp;
 }
 /*
  * conditional - same as x ? y : z
