@@ -136,8 +136,8 @@ long copyLSB(long x) {
  *   Rating: 2
  */
 long dividePower2(long x, long n) {
-
-    return x >> n;
+    // add a (1L << n) - 1 when x is negative
+    return (x + ((x >> 63) & ((1L << n) - 1))) >> n;
 }
 /*
  * distinctNegation - returns 1 if x != -x.
