@@ -238,7 +238,10 @@ long isPalindrome(long x) {
  *  Rating: 4
  */
 long trueFiveEighths(long x) {
-    return 2L;
+    long rem = x & 0x7L;
+    long eights = x >> 3;
+    long negative_mask = (x >> 63) & 7L;
+    return eights + (eights << 2) + (((rem + (rem << 2)) + negative_mask) >> 3);
 }
 /*
  * logicalNeg - implement the ! operator, using all of
