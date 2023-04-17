@@ -176,7 +176,14 @@ long anyEvenBit(long x) {
  *   Rating: 3
  */
 long isLessOrEqual(long x, long y) {
-    return 2;
+    // long msb = x ^ y;
+    // use two Sign variables to preprocess the boundary cases
+    long xSign = !!(x >> 63);             // give the sign of x (1 when x is -)
+    long ySign = !!(y >> 63);             // same as upwards
+    long Less = !!((x + (~y + 1)) >> 63); // normal cases processing
+
+    // use formal two signal expressions to process the boundary cases
+    return (!(ySign & (!xSign))) & ((xSign & (!ySign)) | (!(x ^ y)) | Less);
 }
 /*
  * replaceByte(x,n,c) - Replace byte n in x with c
@@ -203,7 +210,8 @@ long replaceByte(long x, long n, long c) {
  *   Rating: 3
  */
 long conditional(long x, long y, long z) {
-    return 2L;
+    x = (((long)(!x) << 63) >> 63);
+    return ((~x) & y) | (x & z);
 }
 /*
  * bitMask - Generate a mask consisting of all 1's
