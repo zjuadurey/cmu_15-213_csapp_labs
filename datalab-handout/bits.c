@@ -267,13 +267,5 @@ long trueFiveEighths(long x) {
  *   Rating: 4
  */
 long logicalNeg(long x) {
-    long tmp = ~x;
-    // printf("%lx %lx\n", ~x, tmp);
-    tmp = tmp & (tmp >> 32);
-    tmp = tmp & (tmp >> 16);
-    tmp = tmp & (tmp >> 8);
-    tmp = tmp & (tmp >> 4);
-    tmp = tmp & (tmp >> 2);
-    tmp = tmp & (tmp >> 1);
-    return tmp & 1L;
+    return ((x >> 63) | ((~x + 1L) >> 63)) + 1L;
 }
