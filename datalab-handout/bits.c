@@ -224,7 +224,11 @@ long conditional(long x, long y, long z) {
  *   Rating: 3
  */
 long bitMask(long highbit, long lowbit) {
-    return 2L;
+    long abnormal =
+        ((highbit + (~lowbit + 1)) >> 63); // gives 1s when highbit < lowbit
+    long mask = ((1L << highbit << 1) + ~0) ^ ((1L << lowbit) + ~0);
+    // printf("%lx\n", mask);
+    return (mask & ~abnormal);
 }
 // 4
 /*
