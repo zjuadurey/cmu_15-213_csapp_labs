@@ -239,7 +239,34 @@ long bitMask(long highbit, long lowbit) {
  *   Rating: 4
  */
 long isPalindrome(long x) {
-    return 2L;
+    // firstly switch the formal 32 bits and latter 32 bits
+    // secondly switch the formal 16 bits and latter 16 bits in each 1/2 long
+    // ....
+    // finally switch the formal 1 bits and latter 1 bits in each 1/32 long
+    long _0x00000000FFFFFFFF =
+        0xffL + (0xffL << 8) + (0xffL << 16) + (0xffL << 24);
+    long _0x0000FFFF0000FFFF =
+        _0x00000000FFFFFFFF ^ (_0x00000000FFFFFFFF << 16);
+    long _0x00FF00FF00FF00FF = _0x0000FFFF0000FFFF ^ (_0x0000FFFF0000FFFF << 8);
+    long _0x0F0F0F0F0F0F0F0F = _0x00FF00FF00FF00FF ^ (_0x00FF00FF00FF00FF << 4);
+    long _0x3333333333333333 = _0x0F0F0F0F0F0F0F0F ^ (_0x0F0F0F0F0F0F0F0F << 2);
+    long _0x5555555555555555 = _0x3333333333333333 ^ (_0x3333333333333333 << 1);
+    ;
+
+    long x1 =
+        ((x & _0x00000000FFFFFFFF) << 32) | ((x >> 32) & _0x00000000FFFFFFFF);
+    long x2 =
+        ((x1 & _0x0000FFFF0000FFFF) << 16) | ((x1 >> 16) & _0x0000FFFF0000FFFF);
+    long x3 =
+        ((x2 & _0x00FF00FF00FF00FF) << 8) | ((x2 >> 8) & _0x00FF00FF00FF00FF);
+    long x4 =
+        ((x3 & _0x0F0F0F0F0F0F0F0F) << 4) | ((x3 >> 4) & _0x0F0F0F0F0F0F0F0F);
+    long x5 =
+        ((x4 & _0x3333333333333333) << 2) | ((x4 >> 2) & _0x3333333333333333);
+    long x6 =
+        ((x5 & _0x5555555555555555) << 1) | ((x5 >> 1) & _0x5555555555555555);
+
+    return !(x6 ^ x);
 }
 /*
  * trueFiveEighths - multiplies by 5/8 rounding toward 0,
