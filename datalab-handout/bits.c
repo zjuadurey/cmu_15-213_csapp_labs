@@ -138,10 +138,8 @@ long copyLSB(long x) {
 long dividePower2(long x, long n) {
     // add a (1L << n) - 1 when x is negative
     // It's called negative-mask
-    // There are two ways to write negative-mask
-    // long negative_mask1 = (x >> 63) & ((1L << n) - 1);
-    long negative_mask2 = ((x >> 63) & ((1L << n) - 1));
-    return (x + negative_mask2) >> n;
+    long negative_mask = (x >> 63) & ((1L << n) + ~0);
+    return (x + negative_mask) >> n;
 }
 /*
  * distinctNegation - returns 1 if x != -x.
