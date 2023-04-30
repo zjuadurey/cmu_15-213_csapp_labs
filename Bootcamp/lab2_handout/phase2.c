@@ -10,6 +10,7 @@ stack* stack_new() {
   Node* l = (Node*)calloc(1, sizeof(Node));
   S->top = l;
   S->floor = l;
+  S->top->len = 0;
   return S;
 }
 
@@ -19,6 +20,7 @@ void push(stack* S, char *x, int sum) {
   l->sum = sum;
   l->next = S->top;
   S->top = l;
+  S->top->len = S->top->next->len + 1;
 }
 
 // Pop top element from the stack
@@ -58,7 +60,7 @@ int main() {
   pop(S);
   push(S, "b", 13);
   int ans = calc_avg(S);
-  printf("%d", ans);
+  printf("%d\n", ans);
 
   return 0;
 }
