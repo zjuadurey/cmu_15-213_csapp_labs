@@ -492,7 +492,7 @@ Disassembly of section .text:
   4010a8:	48 83 f8 06          	cmp    $0x6,%rax
   4010ac:	75 dd                	jne    40108b <phase_5+0x29>
   4010ae:	c6 44 24 16 00       	movb   $0x0,0x16(%rsp)        # makes sure that the end of the string is NUL or '\0'
-  4010b3:	be 5e 24 40 00       	mov    $0x40245e,%esi
+  4010b3:	be 5e 24 40 00       	mov    $0x40245e,%esi         # hard-encoded string "flyers"
   4010b8:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi
   4010bd:	e8 76 02 00 00       	callq  401338 <strings_not_equal>
   4010c2:	85 c0                	test   %eax,%eax
@@ -813,9 +813,9 @@ Disassembly of section .text:
   401470:	48 8d 46 10          	lea    0x10(%rsi),%rax
   401474:	48 89 04 24          	mov    %rax,(%rsp)
   401478:	4c 8d 4e 0c          	lea    0xc(%rsi),%r9
-  40147c:	4c 8d 46 08          	lea    0x8(%rsi),%r8
-  401480:	be c3 25 40 00       	mov    $0x4025c3,%esi
-  401485:	b8 00 00 00 00       	mov    $0x0,%eax
+  40147c:	4c 8d 46 08          	lea    0x8(%rsi),%r8                # 
+  401480:	be c3 25 40 00       	mov    $0x4025c3,%esi               # format of sscanf
+  401485:	b8 00 00 00 00       	mov    $0x0,%eax                    # %eax: return value
   40148a:	e8 61 f7 ff ff       	callq  400bf0 <__isoc99_sscanf@plt>
   40148f:	83 f8 05             	cmp    $0x5,%eax
   401492:	7f 05                	jg     401499 <read_six_numbers+0x3d>
